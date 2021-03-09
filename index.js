@@ -5,8 +5,10 @@ const app = express();
 const path = require('path');
 // require Mongoose in the file //
 const mongoose = require('mongoose');
+// require product model //
+const Product = require('./models/product');
 
-// import Mongoose //
+// import Mongoose and connect to MongoDB //
 mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => { // error handling //
    console.log("Mongo connection open!");
