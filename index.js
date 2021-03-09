@@ -23,9 +23,12 @@ app.set('views', path.join(__dirname, 'views'));
 // set view engine to ejs //
 app.set('view engine', 'ejs');
 
-// basic routes //
-app.get('/dog', (req, res) => {
-   res.send('WOOF!!');
+// basic routes with async/await api //
+app.get('/products', async (req, res) => {
+   // query the product model //
+   const products = await Product.find({}) // asks for every product //
+   // this gives us access to the db product list //
+   res.render('products/index', {products});
 })
 
 
