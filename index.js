@@ -7,7 +7,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 // import Mongoose //
-mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => { // error handling //
    console.log("Mongo connection open!");
 })
