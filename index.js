@@ -32,12 +32,18 @@ app.use(methodOverride('_method'));
 
 const categories = ['fruit', 'vegetable', 'dairy'];
 
-// basic routes with async/await api //
+// basic routes with async/await api and category filtering //
 app.get('/products', async (req, res) => {
-   // query the product model //
-   const products = await Product.find({}) // asks for every product //
-   // this gives us access to the db product list //
-   res.render('products/index', { products });
+   const { category } = req.query;
+   if(category){
+      const products = await Product.find({ category: category });
+       // this gives us access to the db product list //
+      res.render('products/index', { products, category });
+   } else {
+      // query the product model //
+      const products = await Product.find({}) // asks for every product //
+      res.render('products/index', { products, category: 'All' });
+   }
 })
 
 // route for creating new products //
