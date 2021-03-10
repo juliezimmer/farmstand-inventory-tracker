@@ -30,13 +30,20 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+const categories = ['fruit', 'vegetable', 'dairy'];
 
 // basic routes with async/await api //
 app.get('/products', async (req, res) => {
    // query the product model //
    const products = await Product.find({}) // asks for every product //
    // this gives us access to the db product list //
-   res.render('products/index', {products});
+   res.render('products/index', { products });
+})
+
+// route for creating new products //
+app.get('/products/new', (req, res) => {
+   // renders html template identified //
+   res.render('products/new', { categories });
 })
 
 // route for submitted form //
@@ -45,13 +52,6 @@ app.post('/products', async (req, res) => {
    const newProduct = new Product(req.body);
    await newProduct.save();
    res.redirect(`/products/${newProduct._id}`);
-
-})
-
-// route for creating new products //
-app.get('/products/new', (req, res) => {
-   // renders html template identified //
-   res.render('products/new')
 })
 
 // route to view details about a single product //
@@ -67,8 +67,8 @@ app.get('/products/:id/edit', async (req, res) => {
    const { id } = req.params;
    const product = await Product.findById(id);
 
-   // when product is found, it's passed throughin res.render //
-   res.render('products/edit', { product });
+   // when product is found, it's passed through in res.render //
+   res.render('products/edit', { product, categories });
 })
 
 app.put('/products/:id', async (req, res) => {
