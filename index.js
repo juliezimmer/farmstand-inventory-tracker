@@ -5,8 +5,11 @@ const app = express();
 const path = require('path');
 // require Mongoose in the file //
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 // require product model //
 const Product = require('./models/product');
+const { truncate } = require('fs');
+
 
 // import Mongoose and connect to MongoDB //
 mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -23,7 +26,9 @@ app.set('views', path.join(__dirname, 'views'));
 // set view engine to ejs //
 app.set('view engine', 'ejs');
 
+// middleware //
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 
 // basic routes with async/await api //
@@ -45,7 +50,7 @@ app.post('/products', async (req, res) => {
 
 // route for creating new products //
 app.get('/products/new', (req, res) => {
-   // renders tml template identified //
+   // renders html template identified //
    res.render('products/new')
 })
 
@@ -55,6 +60,22 @@ app.get('/products/:id', async(req, res) => {
    // db query //
    const product = await Product.findById(id); 
    res.render('products/show', { product }); 
+})
+
+// edit request form //
+app.get('/products/:id/edit', async (req, res) => {
+   const { id } = req.params;
+   const product = await Product.findById(id);
+
+   // when product is found, it's passed throughin res.render //
+   res.render('products/edit', { product });
+})
+
+app.put('/products/:id', async (req, res) => {
+   const { id } = req.params;
+   // updating in Mongo via Mongoose //
+   const product = Product.findByIdAndUpdate(id, req.body, {runValiaators: true, new: true});
+   res.redirect(`/products/${id}`);
 })
 
 
