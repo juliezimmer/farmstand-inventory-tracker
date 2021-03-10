@@ -78,6 +78,13 @@ app.put('/products/:id', async (req, res) => {
    res.redirect(`/products/${id}`);
 })
 
+// DELETE route //
+app.delete('/products/:id', async (req, res) => {
+   const { id } = req.params;
+   // remove the product from the DB using the id //
+   const deletedProduct = await Product.findByIdAndDelete(id);
+   res.redirect('/products');
+})
 
 // set the port //
 app.listen(3000, () => {
